@@ -15,7 +15,7 @@
 /* HOOKS */
 
 add_action( 'init', 'ssm_register_shortcodes' );		// Our shortcode
-
+add_action( 'widgets_init', 'ssm_register_widgets' );	// Our widget
 
 
 /* SHORTCODES */
@@ -41,6 +41,91 @@ class Ssm_Somc_Subpages {
 		return Subpage_Hierarchy::get_hierarchy();
   }
 }
+
+
+
+/* WIDGETS */
+
+/**
+ * Function to register widgets
+ */
+function ssm_register_widgets() {
+  register_widget( 'Ssm_Somc_Subpages_Widget' );
+}
+
+
+/**
+ * Class for subpage hierarchy widget
+ */ 
+class Ssm_Somc_Subpages_Widget extends WP_Widget {
+
+  /** 
+   * Constructor
+   */
+  function __construct() {
+    parent::__construct(
+      // Base ID
+      'Ssm_Somc_Subpages_Widget', 
+
+      // Widget name
+      __('Subpage Hierarchy Widget', 'ssm_widget_domain'), 
+
+      // Widget description
+      array( 'description' => __( 'Sample widget based on WPBeginner Tutorial', 'ssm_widget_domain' ), ) 
+    );
+  }
+
+  /**
+   * Widget front-end
+   */
+  public function widget( $args, $instance ) {
+    // Before widget
+    echo $args['before_widget'];
+    
+    // Title
+    $title = apply_filters( 'widget_title', $instance['title'] );
+    if ( ! empty( $title ) ) {
+      echo $args['before_title'] . $title . $args['after_title'];
+    }
+    
+    // Widget content
+    echo Subpage_Hierarchy::get_hierarchy();
+    
+    // After widget
+    echo $args['after_widget'];
+  }
+      
+  
+  /**
+   * Widget backend
+   */ 
+  public function form( $instance ) {
+    // Title
+    if ( isset( $instance[ 'title' ] ) ) {
+      $title = $instance[ 'title' ];
+    }
+    else {
+      $title = __( 'New title', 'ssm_widget_domain' );
+    }
+    
+    // Widget admin form
+    ?>
+      <p>
+      <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
+      <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
+      </p>
+    <?php 
+  }
+    
+  /**
+   * Widget update
+   */
+  public function update( $new_instance, $old_instance ) {
+    $instance = array();
+    $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+    return $instance;
+  }
+} 
 
 
 
