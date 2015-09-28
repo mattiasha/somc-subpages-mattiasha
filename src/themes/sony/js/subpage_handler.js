@@ -66,7 +66,7 @@ jQuery(document).ready(function($){
 		
 		// Add click events on each sort arrow, toggle between ascending and descending order
 		$.each(ul, function() {
-			$(this).find('.ssm-list-sort').click(function(e) {
+			$(this).children('.ssm-list-sort').click(function(e) {
 				if($(e.target).hasClass('dashicons-arrow-up-alt2')) {
 					// Show down icon and sort list in descending order
 					var sortArrow = $(e.target);
