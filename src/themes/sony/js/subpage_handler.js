@@ -32,8 +32,11 @@ jQuery(document).ready(function($){
 	 * Function that makes list expandable/collapsable
 	 */
 	function makeListsExpandable() {
-		// Find all expandable lists and add click event
-		$('.subpageList').find('li:has(ul)')
+		// Remove all old click events
+    $('.subpageList').find('li:has(ul)').unbind('click');
+
+    // Add new click events
+    $('.subpageList').find('li:has(ul)')
 			.click( function(event) {
 				if (this == event.target) {
 					$(this).toggleClass('expanded');
@@ -66,7 +69,11 @@ jQuery(document).ready(function($){
 		
 		// Add click events on each sort arrow, toggle between ascending and descending order
 		$.each(ul, function() {
-			$(this).children('.ssm-list-sort').click(function(e) {
+			// Remove old click events
+      $(this).children('.ssm-list-sort').unbind('click');
+      
+      // Add the new
+      $(this).children('.ssm-list-sort').click(function(e) {
 				if($(e.target).hasClass('dashicons-arrow-up-alt2')) {
 					// Show down icon and sort list in descending order
 					var sortArrow = $(e.target);
